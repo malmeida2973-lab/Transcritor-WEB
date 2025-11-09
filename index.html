@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravador e Transcritor de Reunião</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fonte Inter para um visual mais moderno */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilo customizado para as caixas de texto */
+        .transcript-box {
+            min-height: 150px;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-4xl w-full">
+        
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-indigo-700">Gravador e Transcritor de Reunião</h1>
+            <p class="text-gray-600 mt-2">Grave áudio e transcreva em tempo real.</p>
+        </header>
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div class="mb-4 md:mb-0 w-full md:w-1/3">
+                <label for="languageSelect" class="block text-sm font-medium text-gray-700 mb-1">Idioma de Transcrição:</label>
+                <select id="languageSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option value="pt-BR" selected>Português (Brasil)</option>
+                    <option value="en-US">English (United States)</option>
+                    <option value="es-ES">Español (España)</option>
+                </select>
+            </div>
+            
+            <div class="mb-4 md:mb-0 w-full md:w-1/3">
+                <label for="targetLanguageSelect" class="block text-sm font-medium text-gray-700 mb-1">Traduzir Para:</label>
+                <select id="targetLanguageSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option value="en" selected>Inglês (English)</option>
+                    <option value="pt">Português (Portuguese)</option>
+                    <option value="es">Espanhol (Spanish)</option>
+                    <option value="fr">Francês (French)</option>
+                    <option value="de">Alemão (German)</option>
+                </select>
+            </div>
+
+            <div class="flex items-center gap-2 w-full md:w-1/3 justify-end">
+                <span class="text-sm font-medium text-gray-700">Tempo:</span>
+                <span id="timerDisplay" class="text-2xl font-bold text-red-600">00:00:00</span>
+            </div>
+        </div>
+
+        <div class="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+            <h3 class="font-bold text-indigo-800">Como trocar o microfone:</h3>
+            <p class="text-sm text-indigo-700">
+                Use o ícone de **câmera/microfone** ou o **cadeado (🔒)** na barra de endereço do Chrome para trocar a fonte de áudio. Recarregue a página após trocar.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-4 mb-6">
+            <button id="startButton" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                Iniciar Gravação
+            </button>
+            <button id="stopButton" disabled class="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12v0a9 9 0 01-9 9s-9-4.03-9-9V7a9 9 0 0118 0v5z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v0a9 9 0 01-9 9s-9-4.03-9-9V7a9 9 0 0118 0v5z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-6" />
+                </svg>
+                Parar Gravação
+            </button>
+            
+            <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Limpar Tudo
+            </button>
+            <button id="copyButton" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                Copiar Transcrição
+            </button>
+            
+            <button id="translateButton" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 0113 14.898V17h5l-2 2 2 2h-5v2.102A18.022 18.022 0 019 19.5m-9-9.5h16M3 13h12l-2 2 2 2h-5l-2-2-2-2z" />
+                </svg>
+                Traduzir (Copiar/Colar)
+            </button>
+            
+            <button id="exportButton" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Exportar Resumo (TXT)
+            </button>
+        </div>
+
+        <div id="status" class="text-center text-gray-700 font-medium mb-4">
+            Status: Ocioso
+        </div>
+
+        <div id="download-container" class="text-center mb-4">
+            </div>
+
+        <div class="space-y-6">
+            <div>
+                <label for="interim-transcript" class="block text-sm font-medium text-gray-700 mb-1">Transcrição em tempo real (rascunho):</label>
+                <div id="interim-transcript" class="w-full p-4 bg-gray-100 rounded-lg transcript-box border border-gray-300 text-gray-600 italic"></div>
+            </div>
+
+            <div>
+                <label for="final-transcript" class="block text-sm font-medium text-gray-700 mb-1">Transcrição Final:</label>
+                <div id="final-transcript" class="w-full p-4 bg-white rounded-lg transcript-box border-2 border-indigo-200 text-gray-900 font-medium" style="min-height: 200px;"></div>
+            </div>
+
+            <div>
+                <label for="manual-summary" class="block text-sm font-medium text-gray-700 mb-1">Resumo / Tradução (Ata Manual):</label>
+                <textarea id="manual-summary" class="w-full p-4 bg-indigo-50 rounded-lg transcript-box border-2 border-indigo-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" style="min-height: 200px;" placeholder="Digite aqui o resumo, ou use o botão de tradução para obter um texto traduzido para o idioma de destino."></textarea>
+            </div>
+        </div>
+
+        <div id="error-message" class="hidden mt-6 p-4 bg-red-100 text-red-800 border border-red-300 rounded-lg text-center">
+            Seu navegador não suporta a API de Reconhecimento de Fala. Por favor, use o Google Chrome ou outro navegador compatível.
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Configuração da API de Reconhecimento de Fala ---
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('startButton').disabled = true;
+                document.getElementById('stopButton').disabled = true;
+                document.getElementById('clearButton').disabled = true;
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+
+            // --- Configuração da API de Gravação de Mídia ---
+            let mediaRecorder;
+            let audioChunks = [];
+            let audioStream;
+            
+            // --- Variáveis do Temporizador ---
+            let timerInterval;
+            let startTime;
+
+            // --- Elementos da UI ---
+            const startButton = document.getElementById('startButton');
+            const stopButton = document.getElementById('stopButton');
+            const clearButton = document.getElementById('clearButton');
+            const copyButton = document.getElementById('copyButton');
+            const exportButton = document.getElementById('exportButton');
+            const translateButton = document.getElementById('translateButton');
+            const statusDiv = document.getElementById('status');
+            const interimTranscriptDiv = document.getElementById('interim-transcript');
+            const finalTranscriptDiv = document.getElementById('final-transcript');
+            const downloadContainer = document.getElementById('download-container');
+            const manualSummaryTextarea = document.getElementById('manual-summary');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const languageSelect = document.getElementById('languageSelect');
+            const targetLanguageSelect = document.getElementById('targetLanguageSelect'); // NOVO SELETOR
+
+            let finalTranscript = '';
+            let isRecording = false;
+
+            // --- Funções do Temporizador ---
+            const formatTime = (totalSeconds) => {
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = Math.floor(totalSeconds % 60);
+                
+                return [hours, minutes, seconds]
+                    .map(v => v < 10 ? "0" + v : v)
+                    .join(":");
+            };
+
+            const startTimer = () => {
+                startTime = Date.now();
+                timerDisplay.textContent = '00:00:00';
+                timerInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                    timerDisplay.textContent = formatTime(elapsed);
+                }, 1000);
+            };
+
+            const stopTimer = () => {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+            };
+
+            // --- Event Handler de Troca de Idioma ---
+            languageSelect.addEventListener('change', () => {
+                if (!isRecording) {
+                    recognition.lang = languageSelect.value;
+                    statusDiv.textContent = `Status: Idioma de transcrição definido para ${languageSelect.options[languageSelect.selectedIndex].text}. Pronto.`;
+                } else {
+                    statusDiv.textContent = `AVISO: Pare a gravação para trocar de idioma de transcrição.`;
+                    languageSelect.value = recognition.lang;
+                }
+            });
+
+            // --- Funções da API de Transcrição ---
+
+            recognition.onstart = () => {
+                statusDiv.textContent = `Status: Ouvindo e Gravando... Fale em ${languageSelect.options[languageSelect.selectedIndex].text}.`;
+            };
+
+            recognition.onend = () => {
+                if (isRecording) {
+                    try {
+                        recognition.start();
+                    } catch(e) {
+                        console.error("Erro ao reiniciar recognition:", e);
+                        stopRecording();
+                    }
+                } else {
+                     statusDiv.textContent = 'Status: Ocioso (Clique em Iniciar para recomeçar)';
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Erro no reconhecimento de fala:', event.error);
+                if (event.error === 'not-allowed') {
+                    statusDiv.textContent = 'Erro: Permissão do microfone negada. Verifique o ícone do cadeado (🔒) no Chrome.';
+                    stopRecording();
+                } else if (event.error === 'no-speech') {
+                    statusDiv.textContent = 'Status: Nenhum áudio detectado. Verifique a fonte do microfone.';
+                } else {
+                    statusDiv.textContent = `Erro: ${event.error}`;
+                }
+            };
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const transcriptPart = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        let cleanedPart = transcriptPart.trim();
+                        if (!/[.!?]$/.test(cleanedPart)) {
+                            cleanedPart += '.';
+                        }
+                        finalTranscript += cleanedPart + ' ';
+                    } else {
+                        interimTranscript += transcriptPart;
+                    }
+                }
+                finalTranscriptDiv.innerHTML = finalTranscript.trim().replace(/\. /g, '.<br>');
+                interimTranscriptDiv.textContent = interimTranscript;
+            };
+
+            // --- Funções de Controle (startRecording / stopRecording) mantidas iguais ---
+            const startRecording = async () => {
+                if (isRecording) return;
+                try {
+                    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    isRecording = true;
+                    finalTranscript = ''; finalTranscriptDiv.innerHTML = ''; manualSummaryTextarea.value = '';
+                    audioChunks = []; downloadContainer.innerHTML = '';
+                    startTimer(); 
+                    
+                    const options = { mimeType: 'audio/webm;codecs=opus' };
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                         options.mimeType = 'audio/webm';
+                         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                             options.mimeType = 'audio/wav';
+                         }
+                    }
+                    mediaRecorder = new MediaRecorder(audioStream, options);
+                    mediaRecorder.ondataavailable = (event) => { audioChunks.push(event.data); };
+
+                    mediaRecorder.onstop = () => {
+                        const mimeType = mediaRecorder.mimeType || 'audio/webm';
+                        const fileExtension = mimeType.includes('wav') ? 'wav' : 'webm';
+                        const audioBlob = new Blob(audioChunks, { type: mimeType });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = audioUrl;
+                        downloadLink.download = `gravacao_reuniao_${new Date().toISOString().slice(0, 10)}.${fileExtension}`;
+                        downloadLink.textContent = `Baixar Áudio Gravado (.${fileExtension})`;
+                        downloadLink.className = 'inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300';
+                        downloadContainer.innerHTML = '';
+                        downloadContainer.appendChild(downloadLink);
+                        audioStream.getTracks().forEach(track => track.stop());
+                        statusDiv.textContent = 'Status: Gravação parada. Pronto para exportar ou traduzir.';
+                    };
+                    recognition.start();
+                    mediaRecorder.start();
+                    startButton.disabled = true;
+                    stopButton.disabled = false;
+                    languageSelect.disabled = true; 
+                    startButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    stopButton.classList.remove('disabled:opacity-50', 'disabled:cursor-not-allowed');
+                } catch (err) {
+                    console.error('Erro ao iniciar gravação:', err);
+                    statusDiv.textContent = (err.name === "NotAllowedError") ? 'Erro: Permissão do microfone negada.' : 'Erro: Não foi possível iniciar o microfone.';
+                    isRecording = false; stopTimer();
+                }
+            };
+
+            const stopRecording = () => {
+                if (!isRecording) return;
+                isRecording = false;
+                stopTimer();
+                if (recognition) recognition.stop();
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+                startButton.disabled = false;
+                stopButton.disabled = true;
+                languageSelect.disabled = false;
+                startButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                stopButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
+                statusDiv.textContent = 'Status: Gravação parada. Gerando link de download do áudio...';
+            };
+
+
+            // --- Função de Exportação de TXT ---
+            const exportTranscriptAndSummary = () => {
+                const finalTranscriptText = finalTranscriptDiv.innerText.trim();
+                const manualSummaryText = manualSummaryTextarea.value.trim();
+                
+                if (!finalTranscriptText && !manualSummaryText) {
+                    statusDiv.textContent = 'Status: Não há texto para exportar.';
+                    return;
+                }
+                
+                const exportContent = `
+=============================================
+ATA DE REUNIÃO - EXPORTADO EM ${new Date().toLocaleString('pt-BR')}
+DURAÇÃO: ${timerDisplay.textContent}
+IDIOMA DE TRANSCRIÇÃO: ${languageSelect.options[languageSelect.selectedIndex].text}
+IDIOMA DE TRADUÇÃO/RESUMO (DESTINO): ${targetLanguageSelect.options[targetLanguageSelect.selectedIndex].text}
+=============================================
+
+# RESUMO / TRADUÇÃO (PREENCHIDO MANUALMENTE)
+---------------------------------------------
+${manualSummaryText || 'Nenhum resumo ou tradução fornecida.'}
+
+=============================================
+
+# TRANSCRIÇÃO COMPLETA DA REUNIÃO
+---------------------------------------------
+${finalTranscriptText || 'Nenhuma transcrição de áudio finalizada.'}
+`;
+                
+                const filename = `ata_reuniao_${new Date().toISOString().slice(0, 10)}.txt`;
+                const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                statusDiv.textContent = `Status: Arquivo ${filename} exportado com sucesso!`;
+            };
+
+            // --- NOVO: Função de Tradução Refinada (Cópia/Colagem) ---
+            const translateTranscript = () => {
+                const textToTranslate = finalTranscriptDiv.innerText.trim();
+                if (!textToTranslate) {
+                    statusDiv.textContent = 'Status: Não há transcrição para traduzir. Grave algo primeiro.';
+                    return;
+                }
+
+                const sourceLangText = languageSelect.options[languageSelect.selectedIndex].text;
+                const targetLangCode = targetLanguageSelect.value;
+                const targetLangText = targetLanguageSelect.options[targetLanguageSelect.selectedIndex].text;
+
+                // 1. Tenta copiar o texto de origem
+                try {
+                    navigator.clipboard.writeText(textToTranslate);
+                    // 2. Prepara a caixa de destino com a instrução
+                    manualSummaryTextarea.value = `[TRADUÇÃO MANUAL - ${targetLangText}]\n\n* O texto de origem (${sourceLangText}) foi COPIADO automaticamente. \n* ABRA uma nova aba no navegador (ou clique no link abaixo) e COLE o texto. \n* COPIE a tradução e COLE-A aqui para finalizar a ata.`;
+                    
+                    // 3. Abre o Google Tradutor com os parâmetros corretos
+                    const translationUrl = `https://translate.google.com/?sl=${recognition.lang.split('-')[0]}&tl=${targetLangCode}&text=${encodeURIComponent(textToTranslate.substring(0, 50))}&op=translate`;
+                    window.open(translationUrl, '_blank');
+                    
+                    statusDiv.textContent = `Status: Transcrição copiada! Abra a nova aba para traduzir para ${targetLangText} e cole no campo abaixo.`;
+                } catch (err) {
+                    // Fallback se a cópia falhar
+                    console.error('Erro ao usar clipboard.writeText: ', err);
+                    manualSummaryTextarea.value = `[ERRO NA CÓPIA] Por favor, COPIE a Transcrição Final manualmente para traduzir para ${targetLangText} e COLE aqui.`;
+                    statusDiv.textContent = `Status: ATENÇÃO! Copie a Transcrição Final manualmente para traduzir.`;
+                }
+            };
+
+
+            // --- Event Handlers dos Botões ---
+
+            startButton.addEventListener('click', startRecording);
+            stopButton.addEventListener('click', stopRecording);
+            exportButton.addEventListener('click', exportTranscriptAndSummary);
+            translateButton.addEventListener('click', translateTranscript);
+
+            clearButton.addEventListener('click', () => {
+                if (isRecording) stopRecording();
+                finalTranscript = '';
+                finalTranscriptDiv.innerHTML = '';
+                interimTranscriptDiv.textContent = '';
+                manualSummaryTextarea.value = '';
+                downloadContainer.innerHTML = '';
+                timerDisplay.textContent = '00:00:00';
+                statusDiv.textContent = 'Status: Tudo limpo. Pronto para começar.';
+            });
+
+            copyButton.addEventListener('click', () => {
+                const textToCopy = finalTranscriptDiv.innerText;
+                if (!textToCopy) {
+                    statusDiv.textContent = 'Status: Nada para copiar.';
+                    return;
+                }
+                
+                try {
+                    navigator.clipboard.writeText(textToCopy);
+                    statusDiv.textContent = 'Status: Transcrição copiada para a área de transferência!';
+                } catch (err) {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    statusDiv.textContent = 'Status: Transcrição copiada para a área de transferência! (método fallback)';
+                }
+            });
+
+            // --- Chamada Inicial ---
+            statusDiv.textContent = 'Status: Pronto para iniciar.';
+        });
+    </script>
+</body>
+</html>
