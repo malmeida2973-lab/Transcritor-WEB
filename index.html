@@ -227,7 +227,7 @@
             let mediaRecorder, audioChunks = [], audioStream, timerInterval, startTime, wakeLock = null;
             let userApiKey = null;
             // Endpoint para Gemini 2.5 Flash (Suporta Áudio)
-            const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
+            const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
             let db, currentVisitIdToExport = null, currentVisitDataToExport = null, currentScheduledVisitId = null;
             const DB_NAME = "VisitAssistantDB", DB_VERSION = 3, VISIT_STORE = "visits", SCHEDULE_STORE = "scheduledVisits", TASK_STORE = "tasks";
 
