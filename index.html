@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistente de Visita AI v14</title>
+    <title>Assistente v15</title>
     
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4f46e5">
-    <link rel="apple-touch-icon" href="https://placehold.co/192x192/4f46e5/ffffff?text=AV">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="https://placehold.co/192x192/1e293b/ffffff?text=AV">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -37,19 +37,19 @@
 
     <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-5xl w-full mx-auto relative">
         
-        <!-- Cabeçalho -->
-        <header class="flex justify-between items-start mb-6">
+        <!-- Cabeçalho v15 (MUDANÇA VISUAL: Texto Escuro) -->
+        <header class="flex justify-between items-start mb-6 border-b pb-4">
             <div class="flex-1"></div>
             <div class="text-center">
-                <h1 class="text-3xl font-bold text-indigo-700">Assistente de Visita</h1>
-                <p class="text-gray-600 mt-2 text-xs font-bold text-green-600">v14 (Gemini 3.0 Pro)</p>
+                <h1 class="text-3xl font-bold text-slate-800">Assistente de Visita</h1>
+                <p class="text-green-600 mt-1 text-xs font-bold uppercase tracking-wide">v15 • Gemini 2.0 Flash</p>
             </div>
             <div class="flex-1 text-right space-x-4 flex justify-end">
-                <button id="privacy-button" class="text-gray-500 hover:text-indigo-600 transition duration-300 flex flex-col items-center" title="Modo Privacidade">
+                <button id="privacy-button" class="text-gray-500 hover:text-slate-800 transition duration-300 flex flex-col items-center" title="Modo Privacidade">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a9.97 9.97 0 01-1.563 3.029m-5.858-.908a3 3 0 00-4.243-4.243" /></svg>
                     <span class="text-xs">Ecrã</span>
                 </button>
-                <button id="settings-button" class="text-gray-500 hover:text-indigo-600 transition duration-300 flex flex-col items-center" title="Configurações">
+                <button id="settings-button" class="text-gray-500 hover:text-slate-800 transition duration-300 flex flex-col items-center" title="Configurações">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.09 2.573-1.066z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     <span class="text-xs">Config</span>
                 </button>
@@ -58,17 +58,17 @@
 
         <!-- Seção Tarefas -->
         <div class="border-b-2 border-gray-200 pb-6 mb-6">
-            <h2 class="text-2xl font-bold text-indigo-700 mb-4">Tarefas Pendentes</h2>
+            <h2 class="text-2xl font-bold text-slate-700 mb-4">Tarefas Pendentes</h2>
             <div class="flex gap-3 mb-4">
-                <input type="text" id="task-input" class="mt-1 block w-full input-field flex-grow border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Adicionar nova tarefa...">
-                <button id="add-task-button" class="flex-shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">Adicionar</button>
+                <input type="text" id="task-input" class="mt-1 block w-full input-field flex-grow border-gray-300 rounded-md shadow-sm focus:border-slate-500 focus:ring-slate-500" placeholder="Adicionar nova tarefa...">
+                <button id="add-task-button" class="flex-shrink-0 bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">Adicionar</button>
             </div>
             <div id="task-list" class="space-y-2 max-h-[300px] overflow-y-auto pr-2"><p id="tasks-loading" class="text-gray-500">Carregando tarefas...</p></div>
         </div>
 
         <!-- Seção Agendamentos -->
         <div class="border-b-2 border-gray-200 pb-6 mb-6">
-            <h2 class="text-2xl font-bold text-indigo-700 mb-4">Agendamentos</h2>
+            <h2 class="text-2xl font-bold text-slate-700 mb-4">Agendamentos</h2>
             <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Agendar Nova Visita</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -76,7 +76,7 @@
                     <div><label class="block text-sm font-medium text-gray-700 mb-1">Contato</label><input type="text" id="scheduledContactPerson" class="mt-1 block w-full input-field border-gray-300 rounded-md shadow-sm" placeholder="Sr. João"></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" id="scheduledEmail" class="mt-1 block w-full input-field border-gray-300 rounded-md shadow-sm" placeholder="email@exemplo.com"></div>
                 </div>
-                <div class="text-right mt-4"><button id="saveScheduleButton" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300">Agendar Visita</button></div>
+                <div class="text-right mt-4"><button id="saveScheduleButton" class="w-full sm:w-auto bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300">Agendar Visita</button></div>
             </div>
             <div>
                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Visitas Agendadas</h3>
@@ -86,7 +86,7 @@
 
         <!-- Seção Gravação -->
         <div class="border-b-2 border-gray-200 pb-6 mb-6">
-            <h2 class="text-2xl font-bold text-indigo-700 mb-4">Gravação da Visita</h2>
+            <h2 class="text-2xl font-bold text-slate-700 mb-4">Gravação da Visita</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">Nome do Cliente:</label><input type="text" id="clientNameInput" class="mt-1 block w-full input-field border-gray-300 rounded-md shadow-sm" placeholder="Cliente"></div>
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">Contato:</label><input type="text" id="contactPersonInput" class="mt-1 block w-full input-field border-gray-300 rounded-md shadow-sm" placeholder="Contato"></div>
@@ -123,7 +123,7 @@
 
         <!-- Seção Histórico -->
         <div id="history-section" class="mt-8">
-            <h2 class="text-2xl font-bold text-indigo-700 mb-4">Histórico de Visitas (Concluídas)</h2>
+            <h2 class="text-2xl font-bold text-slate-700 mb-4">Histórico de Visitas (Concluídas)</h2>
             <div id="history-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"><p id="history-loading" class="text-gray-500">Carregando histórico...</p></div>
         </div>
     </div>
@@ -141,7 +141,7 @@
     <div id="settings-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
         <div class="modal-overlay fixed inset-0"></div>
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg z-10">
-            <div class="flex justify-between items-center p-4 border-b"><h3 class="text-xl font-bold text-indigo-700">Configurações</h3><button id="settings-modal-close-button" class="text-gray-400 hover:text-gray-600">X</button></div>
+            <div class="flex justify-between items-center p-4 border-b"><h3 class="text-xl font-bold text-slate-700">Configurações</h3><button id="settings-modal-close-button" class="text-gray-400 hover:text-gray-600">X</button></div>
             <div class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Chave de API do Gemini</label>
@@ -178,7 +178,7 @@
     <div id="visit-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
         <div class="modal-overlay fixed inset-0"></div>
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl z-10 max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center p-4 border-b"><h3 id="modal-title" class="text-xl font-bold text-indigo-700">Detalhes</h3><button id="modal-close-button" class="text-gray-400 hover:text-gray-600">X</button></div>
+            <div class="flex justify-between items-center p-4 border-b"><h3 id="modal-title" class="text-xl font-bold text-slate-700">Detalhes</h3><button id="modal-close-button" class="text-gray-400 hover:text-gray-600">X</button></div>
             <div class="p-6 space-y-4 overflow-y-auto">
                 <p class="text-sm text-gray-600">Cliente: <span id="modal-client-name" class="font-medium text-gray-900"></span></p>
                 <p class="text-sm text-gray-600">Data: <span id="modal-date-time" class="font-medium text-gray-900"></span></p>
@@ -186,9 +186,9 @@
                 <div id="modal-audio-section">
                     <h4 class="text-md font-medium text-gray-700 mb-2">Áudio da Visita:</h4>
                     <audio id="modalAudioPlayer" controls class="w-full mb-2"></audio>
-                    <button id="modal-ai-transcribe-audio-button" class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition ai-button" style="display: none;">
+                    <button id="modal-ai-transcribe-audio-button" class="w-full flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition ai-button" style="display: none;">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                        ✨ Transcrever Áudio (Gemini 3.0 Pro)
+                        ✨ Transcrever (Gemini 2.0)
                     </button>
                 </div>
 
@@ -199,7 +199,7 @@
                 <div id="modal-status-message" class="text-sm text-green-700 font-medium"></div>
 
                 <div id="modal-ai-summary-section" class="ai-section space-y-2"><label class="block text-sm font-medium text-gray-700">Resumo:</label><textarea id="ai-summary-result" class="w-full p-3 bg-indigo-50 border-indigo-200 text-gray-900 rounded-lg" rows="5" readonly></textarea></div>
-                <div id="modal-ai-tasks-section" class="ai-section space-y-2"><label class="block text-sm font-medium text-gray-700">Tarefas:</label><textarea id="ai-tasks-result" class="w-full p-3 bg-indigo-50 border-indigo-200 text-gray-900 rounded-lg" rows="5"></textarea><button id="add-ai-tasks-button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md">Adicionar Tarefas</button></div>
+                <div id="modal-ai-tasks-section" class="ai-section space-y-2"><label class="block text-sm font-medium text-gray-700">Tarefas:</label><textarea id="ai-tasks-result" class="w-full p-3 bg-indigo-50 border-indigo-200 text-gray-900 rounded-lg" rows="5"></textarea><button id="add-ai-tasks-button" class="w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-lg shadow-md">Adicionar Tarefas</button></div>
             </div>
 
             <div class="flex flex-wrap justify-between items-center gap-3 p-4 bg-gray-50 border-t rounded-b-2xl">
@@ -223,8 +223,8 @@
             let mediaRecorder, audioChunks = [], audioStream, timerInterval, startTime, wakeLock = null;
             let userApiKey = null;
             
-            // (v14) GEMINI 3.0 PRO PREVIEW
-            const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-pro-preview:generateContent?key=";
+            // (v15) URL Segura: Gemini 2.0 Flash Exp (Estável e Poderoso para Áudio)
+            const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=";
             
             let db, currentVisitIdToExport = null, currentVisitDataToExport = null, currentScheduledVisitId = null;
             const DB_NAME = "VisitAssistantDB", DB_VERSION = 3, VISIT_STORE = "visits", SCHEDULE_STORE = "scheduledVisits", TASK_STORE = "tasks";
